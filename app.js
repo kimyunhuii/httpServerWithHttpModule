@@ -30,6 +30,7 @@ const posts = [
   },
 ];
 
+// 유저 회원가입(등록)
 const createUser = (req, res) => {
 
   const {id, name, email, password} = req.body.data   // 구조분해할당
@@ -40,11 +41,9 @@ const createUser = (req, res) => {
   console.log('after: ', users)
 
   res.json({ message: "USER_CREATED" })
-  // express 덕분에 JSON.stringify 함수를 사용할 필요없이
-  // response 객체의 json 메소드를 활용한다
-  
 }
 
+// 게시글 등록하기
 const createPost = (req, res) => {
 
   const {id, title, content, userId} = req.body.data
@@ -54,8 +53,26 @@ const createPost = (req, res) => {
 
   console.log('after: ', posts)
 
-  res.json({ message: "USER_CREATED" })
-  
+  res.json({ message: "POST_CREATED" })
 }
 
-module.exports = { createUser, createPost } // routing.js 에서 사용하기 위해 모듈로 내보낸다
+// 게시글 목록 조회하기
+const postList = (req, res) => {
+
+  console.log(posts)
+
+  res.json({posts})
+}
+
+// 개시글 수정하기
+const postUpdate = (req, res) => {
+
+}
+
+// 개시글 삭제하기
+
+
+// 유저와 게시글 조회하기
+
+
+module.exports = { createUser, createPost , postList, postUpdate} // routing.js 에서 사용하기 위해 모듈로 내보낸다
