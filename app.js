@@ -26,17 +26,31 @@ const posts = [
     id: 2,
     title: "HTTP의 특성",
     content: "Request/Response와 Stateless!!",
-    userId: 1,
+    userId: 2,
   },
 ];
 
 // 유저 회원가입(등록)
 const createUser = (req, res) => {
+  const lastUser = users[users.length-1].id
 
-  const {id, name, email, password} = req.body.data   // 구조분해할당
+  const {name, email, password} = req.body.data   // 구조분해할당
   console.log(user)
 
-	users.push({id, name, email, password})
+  if(lastUser){
+    users.push({id : lastUser++,
+      name, 
+      email, 
+      password
+    })
+  }else{
+    users.push({id : 1,
+      name, 
+      email, 
+      password
+    })
+  }
+	
 
   console.log('after: ', users)
 
@@ -59,14 +73,34 @@ const createPost = (req, res) => {
 // 게시글 목록 조회하기
 const postList = (req, res) => {
 
-  console.log(posts)
+  const postWithUserName =  posts.map( (post)=>{
+    post.userId
+    const user = users.find((user) => post.userId === user.id)
 
-  res.json({posts})
+    return{
+      ...post,
+      userName: user.name
+    }
+  });
+
+  res.json({data : postWithUserName})
 }
 
 // 개시글 수정하기
 const postUpdate = (req, res) => {
+  const { id, content } = req.body;
 
+  const postNumber = posts.find((post) => post.id === id);  // 함수 알고 쓰기.. {post.id === id} 이렇게 적었다가 undefined 에러..
+  const user = users.find((user) => postNumber.userId === user.id);
+  const newPost = {
+    id: postNumber.id,
+    title: postNumber.title,
+    content: content,
+    userId: postNumber.userId,
+    userName: user.name
+  };
+
+  res.json({data : newPost});
 }
 
 // 개시글 삭제하기
