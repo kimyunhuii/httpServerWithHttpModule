@@ -1,4 +1,5 @@
 // app.js
+const util = require('util')
 
 const users = [
   {
@@ -104,9 +105,20 @@ const postUpdate = (req, res) => {
 }
 
 // 개시글 삭제하기
+const postDelete = (req, res) => {
+  const { id } = req.body;
 
+  posts.forEach((el, index) => {
+    console.log("el : "+ util.inspect(el))
+    if(el.id === id ){
+      posts.splice(index, 1)
+    }
+  })
+  console.log("posts : "+ util.inspect(posts))
+  res.json({message : "postingDeleted"});
+}
 
 // 유저와 게시글 조회하기
 
 
-module.exports = { createUser, createPost , postList, postUpdate} // routing.js 에서 사용하기 위해 모듈로 내보낸다
+module.exports = { createUser, createPost , postList, postUpdate, postDelete} // routing.js 에서 사용하기 위해 모듈로 내보낸다
