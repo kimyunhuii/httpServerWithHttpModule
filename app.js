@@ -27,7 +27,7 @@ const posts = [
     id: 2,
     title: "HTTP의 특성",
     content: "Request/Response와 Stateless!!",
-    userId: 2,
+    userId: 1,
   },
 ];
 
@@ -109,7 +109,6 @@ const postDelete = (req, res) => {
   const { id } = req.body;
 
   posts.forEach((el, index) => {
-    console.log("el : "+ util.inspect(el))
     if(el.id === id ){
       posts.splice(index, 1)
     }
@@ -119,6 +118,32 @@ const postDelete = (req, res) => {
 }
 
 // 유저와 게시글 조회하기
+const userPost = (req, res) => {
+  const { id } = req.body;
 
+  const user = users.find((user) => id === user.id);
+  
+  const posting = [];
+  const data = users.forEach((el, index) => {
+    if(el.id === id ){
+      posts.forEach((ele, index2) => 
+        {if(ele.userId === id){
+          posting[index2] = {
+            postingId      : ele.id,
+	          postingName    : ele.title,
+			      postingContent : ele.content
+          };
+        }
+      })
+    }
+  })
 
-module.exports = { createUser, createPost , postList, postUpdate, postDelete} // routing.js 에서 사용하기 위해 모듈로 내보낸다
+  const newPost = {
+    userID  : user.id,
+	  userName : user.name,
+    postings : posting
+  };
+  res.json({data : newPost})
+}
+
+module.exports = { createUser, createPost , postList, postUpdate, postDelete, userPost} // routing.js 에서 사용하기 위해 모듈로 내보낸다
